@@ -11,7 +11,7 @@ jobs:
 
       - name: get pem file
         run: |
-          echo "${{ SECRETS }}" > key.pem
+          echo "${{ secrets.SECRETS }}" > key.pem
           chmod 400 key.pem
           
       - name: copy app.py
