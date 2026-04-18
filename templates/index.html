@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Banking App</title>
+    <title>Student Result System</title>
 </head>
 <body>
 
-<h1>  Banking App</h1>
+    <h1>📘 Student Result System</h1>
 
-<h2>Create Account</h2>
-<form action="/create" method="post">
-    Name: <input type="text" name="name" required>
-    <button type="submit">Create</button>
-</form>
+    <!--  Message from Flask -->
+    {% if msg %}
+        <p style="color:green;"><b>{{ msg }}</b></p>
+    {% endif %}
 
-<h2>Deposit</h2>
-<form action="/deposit" method="post">
-    Account No: <input type="number" name="acc" required>
-    Amount: <input type="number" name="amount" required>
-    <button type="submit">Deposit</button>
-</form>
+    <hr>
 
-<h2>Withdraw</h2>
-<form action="/withdraw" method="post">
-    Account No: <input type="number" name="acc" required>
-    Amount: <input type="number" name="amount" required>
-    <button type="submit">Withdraw</button>
-</form>
+    <!--  TEACHER -->
+    <h2> Teacher Section</h2>
+    <p>Login to add/update student marks</p>
+    <a href="/teacher">
+        <button>Teacher Login</button>
+    </a>
 
-<h2>Check Account</h2>
-<form action="/account" method="post">
-    Account No: <input type="number" name="acc" required>
-    <button type="submit">Check</button>
-</form>
+    <hr>
 
-<h2>Remove Account</h2>
-<form action="/delete" method="post">
-    Account No: <input type="number" name="acc" required>
-    <button type="submit" style="background-color:red;color:white;">
-        Remove Account
-    </button>
-</form>
+    <!-- 🎓 STUDENT -->
+    <h2> Student Section</h2>
+    <p>Login to view your marks</p>
+    <a href="/student">
+        <button>Student Login</button>
+    </a>
+
+    <hr>
+
+    <!--  QUICK CHECK (NEW FEATURE) -->
+    <h2> Quick Result Check</h2>
+    <form action="/student" method="post">
+        Student ID: <input type="number" name="sid" required><br><br>
+        DOB: <input type="text" name="dob" placeholder="dd-mm-yyyy" required><br><br>
+        <button type="submit">View Result</button>
+    </form>
+
+    <hr>
+
+    <!--  HEALTH CHECK -->
+    <h2> System Status</h2>
+    <a href="/health">
+        <button>Check Health</button>
+    </a>
 
 </body>
 </html>
