@@ -3,50 +3,85 @@
 <head>
     <title>Student Result System</title>
 </head>
-<body>
+<body style="font-family: Arial; text-align:center;">
 
-    <h1>📘 Student Result System</h1>
+<h1> Student Result System</h1>
 
-    <!--  Message from Flask -->
-    {% if msg %}
-        <p style="color:green;"><b>{{ msg }}</b></p>
-    {% endif %}
+{% if msg %}
+    <p style="color:green;"><b>{{ msg }}</b></p>
+{% endif %}
 
-    <hr>
+<hr>
 
-    <!--  TEACHER -->
-    <h2> Teacher Section</h2>
-    <p>Login to add/update student marks</p>
-    <a href="/teacher">
-        <button>Teacher Login</button>
-    </a>
+<!--  TEACHER LOGIN -->
+<h2> Teacher Login</h2>
+<form action="/teacher" method="post">
+    ID:<br>
+    <input type="number" name="tid" required><br><br>
 
-    <hr>
+    Password:<br>
+    <input type="password" name="tpass" required><br><br>
 
-    <!-- 🎓 STUDENT -->
-    <h2> Student Section</h2>
-    <p>Login to view your marks</p>
-    <a href="/student">
-        <button>Student Login</button>
-    </a>
+    <button type="submit">Login </button>
+</form>
 
-    <hr>
+<hr>
 
-    <!--  QUICK CHECK (NEW FEATURE) -->
-    <h2> Quick Result Check</h2>
-    <form action="/student" method="post">
-        Student ID: <input type="number" name="sid" required><br><br>
-        DOB: <input type="text" name="dob" placeholder="dd-mm-yyyy" required><br><br>
-        <button type="submit">View Result</button>
-    </form>
+<!-- 📝 ADD MARKS -->
+<h2> Add Student Marks</h2>
+<form action="/add_marks" method="post">
+    Student ID:<br>
+    <input type="number" name="sid" required><br><br>
 
-    <hr>
+    Tamil:<br>
+    <input type="number" name="tamil"><br>
 
-    <!--  HEALTH CHECK -->
-    <h2> System Status</h2>
-    <a href="/health">
-        <button>Check Health</button>
-    </a>
+    English:<br>
+    <input type="number" name="english"><br>
+
+    Maths:<br>
+    <input type="number" name="maths"><br>
+
+    Science:<br>
+    <input type="number" name="science"><br>
+
+    Social:<br>
+    <input type="number" name="social"><br><br>
+
+    <button type="submit">Submit </button>
+</form>
+
+<hr>
+
+<!-- 🎓 STUDENT LOGIN -->
+<h2> Student Login</h2>
+<form action="/student" method="post">
+    Student ID:<br>
+    <input type="number" name="sid" required><br><br>
+
+    DOB (dd-mm-yyyy):<br>
+    <input type="text" name="dob" required><br><br>
+
+    <button type="submit">View Result 📊</button>
+</form>
+
+<hr>
+
+<!-- 🔍 QUICK CHECK -->
+<h2> Quick Result Check</h2>
+<form action="/student" method="post">
+    <input type="number" name="sid" placeholder="Student ID" required><br><br>
+    <input type="text" name="dob" placeholder="DOB dd-mm-yyyy" required><br><br>
+    <button type="submit">Check ⚡</button>
+</form>
+
+<hr>
+
+<!-- 🩺 HEALTH -->
+<h2>🩺 System Status</h2>
+<a href="/health">
+    <button>Check Health </button>
+</a>
 
 </body>
 </html>
