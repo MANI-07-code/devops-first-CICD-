@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Banking App</title>
+</head>
+<body>
+
+<h1> Pradeep Banking App</h1>
+
+<h2>Create Account</h2>
+<form action="/create" method="post">
+    Name: <input type="text" name="name" required>
+    <button type="submit">Create</button>
+</form>
+
+<h2>Deposit</h2>
+<form action="/deposit" method="post">
+    Account No: <input type="number" name="acc" required>
+    Amount: <input type="number" name="amount" required>
+    <button type="submit">Deposit</button>
+</form>
+
+<h2>Withdraw</h2>
+<form action="/withdraw" method="post">
+    Account No: <input type="number" name="acc" required>
+    Amount: <input type="number" name="amount" required>
+    <button type="submit">Withdraw</button>
+</form>
+
+<h2>Check Account</h2>
+<form action="/account" method="post">
+    Account No: <input type="number" name="acc" required>
+    <button type="submit">Check</button>
+</form>
+
+<h2>Remove Account</h2>
+<form action="/delete" method="post">
+    Account No: <input type="number" name="acc" required>
+    <button type="submit" style="background-color:red;color:white;">
+        Remove Account
+    </button>
+</form>
+
+</body>
+</html>
