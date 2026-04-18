@@ -22,7 +22,7 @@ jobs:
 
       - name: run application
         run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@13.201.50.215"
+          ssh -o StrictHostKeyChecking=no -i MANI-key.pem ec2-user@13.201.50.215"
           cd /home/ec2-user &&
           python3 -m venv virtualenv &&
           source virtualenv/bin/activate &&
