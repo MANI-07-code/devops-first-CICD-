@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 app = Flask(__name__)
+app.secret_key = "secret123"  # needed for session
 
 # ---------------- DATA ----------------
 students = {
@@ -22,45 +23,50 @@ def home():
 @app.route("/teacher", methods=["GET", "POST"])
 def teacher():
     if request.method == "POST":
-        try:
-            tid = int(request.form["tid"])
-            tpass = int(request.form["tpass"])
-        except:
-            return "Invalid input"
+        tid = request.form.get("tid")
+        tpass = request.form.get("tpass")
 
-        if tid == TEACHER_ID and tpass == TEACHER_PASS:
+        if tid == str(TEACHER_ID) and tpass == str(TEACHER_PASS):
+            session["teacher"] = True
             return redirect(url_for("add_marks"))
         else:
-            return "Invalid teacher credentials"
+            flash("Invalid teacher credentials")
 
     return render_template("teacher_login.html")
+
+
+# ---------------- LOGOUT ----------------
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
 
 
 # ---------------- ADD MARKS ----------------
 @app.route("/add_marks", methods=["GET", "POST"])
 def add_marks():
+    if not session.get("teacher"):
+        return redirect(url_for("teacher"))
+
     if request.method == "POST":
         try:
             sid = int(request.form["sid"])
-            t = int(request.form["tamil"])
-            e = int(request.form["english"])
-            m = int(request.form["maths"])
-            sci = int(request.form["science"])
-            soc = int(request.form["social"])
+            marks = {
+                "tamil": int(request.form["tamil"]),
+                "english": int(request.form["english"]),
+                "maths": int(request.form["maths"]),
+                "science": int(request.form["science"]),
+                "social": int(request.form["social"])
+            }
         except:
-            return "Invalid input"
+            flash("Invalid input")
+            return redirect(url_for("add_marks"))
 
         if sid in students:
-            students[sid]["marks"] = {
-                "tamil": t,
-                "english": e,
-                "maths": m,
-                "science": sci,
-                "social": soc
-            }
-            return render_template("result.html", msg="Marks updated successfully!")
+            students[sid]["marks"] = marks
+            flash("Marks updated successfully!")
         else:
-            return render_template("result.html", msg="Invalid student ID")
+            flash("Student not found")
 
     return render_template("add_marks.html")
 
@@ -71,14 +77,20 @@ def student():
     if request.method == "POST":
         try:
             sid = int(request.form["sid"])
-            dob = request.form["dob"]
+            dob = request.form["dob"].strip()
         except:
-            return "Invalid input"
+            flash("Invalid input")
+            return redirect(url_for("home"))
 
-        if sid in students and students[sid]["dob"] == dob:
-            return redirect(url_for("view_marks", sid=sid))
-        else:
-            return render_template("result.html", msg="Invalid student details")
+        if sid not in students:
+            flash("Student not found")
+            return redirect(url_for("home"))
+
+        if students[sid]["dob"] != dob:
+            flash("Wrong DOB")
+            return redirect(url_for("home"))
+
+        return redirect(url_for("view_marks", sid=sid))
 
     return render_template("student_login.html")
 
@@ -86,18 +98,34 @@ def student():
 # ---------------- VIEW MARKS ----------------
 @app.route("/view/<int:sid>")
 def view_marks(sid):
-    if sid in students:
-        student = students[sid]
-        return render_template("view.html", student=student)
-    return render_template("result.html", msg="Student not found")
+    student = students.get(sid)
+
+    if not student:
+        return "Student not found"
+
+    marks = student["marks"]
+
+    total = sum(marks.values()) if marks else 0
+    avg = total / 5 if marks else 0
+
+    grade = "N/A"
+    if avg >= 90:
+        grade = "A"
+    elif avg >= 75:
+        grade = "B"
+    elif avg >= 50:
+        grade = "C"
+    else:
+        grade = "Fail"
+
+    return render_template("view.html", student=student, total=total, avg=avg, grade=grade)
 
 
-# ---------------- HEALTH CHECK ----------------
+# ---------------- HEALTH ----------------
 @app.route("/health")
 def health():
-    return jsonify({"status": "running"}), 200
+    return {"status": "running"}
 
 
-# ---------------- RUN ----------------
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001)
