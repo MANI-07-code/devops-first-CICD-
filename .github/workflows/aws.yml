@@ -1,0 +1,29 @@
+Development pipeline:
+name: aws-pipeline
+on: workflow_dispatch
+
+jobs:
+  build-jobs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v6
+        with:
+          ref: main
+
+      - name: installing python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: virtual env
+        run:  |
+          python3 -m venv virtualenv
+          source virtualenv/bin/activate
+
+      - name: install dependency
+        run: pip3 install -r requirements.txt
+
+      - name: run application
+        run: python3 app.py
